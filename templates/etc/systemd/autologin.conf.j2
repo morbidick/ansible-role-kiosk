@@ -1,0 +1,6 @@
+# auto login
+# {{ ansible_managed }}
+
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --autologin {{ kiosk_user }} --noclear %I $TERM

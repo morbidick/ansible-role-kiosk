@@ -1,0 +1,6 @@
+---
+galaxy_info:
+  author: Lukas Mohrbacher
+  description: autologin, start X and a Chrome Browser in kiosk mode
+  license: MIT
+  dependencies: []

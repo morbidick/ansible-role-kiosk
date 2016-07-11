@@ -1,0 +1,69 @@
+---
+- name: create user
+  user:
+    name: "{{ kiosk_user }}"
+  when: kiosk_systemd_autologin
+
+- name: install dependencies
+  package:
+    name: "{{ item }}"
+    state: "present"
+  with_items:
+    - xorg
+    - matchbox
+    - unclutter
+    - midori
+
+- name: enable autologin
+  template:
+    src: etc/systemd/autologin.conf.j2
+    dest: "{{ kiosk_systemd_autologin_file }}"
+  when: kiosk_systemd_autologin
+
+- name: autostart x server
+  lineinfile:
+    dest: "{{ kiosk_bashrc_file }}"
+    regexp: "exec startx"
+    line: "[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx"
+    insertafter: EOF
+    state: present
+    create: yes
+    owner: "{{ kiosk_user }}"
+    group: "{{ kiosk_user }}"
+  when: kiosk_x_autostart
+
+- name: enable user to start x
+  lineinfile:
+    dest: "/etc/X11/Xwrapper.config"
+    regexp: "allowed_users="
+    line: "allowed_users=anybody"
+    state: present
+    backrefs: yes
+  when: kiosk_x_autostart
+
+- name: disable screensaver
+  blockinfile:
+    dest: "{{ kiosk_xinitrc_file }}"
+    block: "{{ kiosk_screensaver_commands }}"
+    state: present
+    create: yes
+    owner: "{{ kiosk_user }}"
+    group: "{{ kiosk_user }}"
+  when: kiosk_deactivate_screensaver
+
+- name: enable window manager autostart
+  lineinfile:
+    dest: "{{ kiosk_xinitrc_file }}"
+    regexp: "window-manager"
+    line: "{{ kiosk_window_manager_command }}"
+    backrefs: yes
+    state: present
+  when: kiosk_window_manager
+
+- name: enable browser autostart
+  lineinfile:
+    dest: "{{ kiosk_xinitrc_file }}"
+    regexp: "exec"
+    line: "{{ kiosk_browser_command }}"
+    insertafter: EOF
+    state: present
