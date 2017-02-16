@@ -1,6 +1,14 @@
 ---
 galaxy_info:
-  author: Lukas Mohrbacher
+  author: morbidick
   description: autologin, start X and a Chrome Browser in kiosk mode
   license: MIT
   dependencies: []
+  min_ansible_version: 2.0.0
+  platforms:
+  - name: Debian
+    versions:
+    - all
+  - name: Ubuntu
+    versions:
+    - all
