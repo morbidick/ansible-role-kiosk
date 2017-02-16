@@ -13,6 +13,11 @@
     - matchbox
     - unclutter
     - midori
+- name: ensure autologin config file path exits
+  file:
+    path: "{{ kiosk_systemd_autologin_path }}"
+    recurse: yes
+    state: directory
 
 - name: enable autologin
   template:

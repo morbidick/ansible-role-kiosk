@@ -1,7 +1,8 @@
 ---
 kiosk_user: kiosk
 kiosk_systemd_autologin: yes
-kiosk_systemd_autologin_file: "/etc/systemd/system/getty@tty1.service.d/autologin.conf"
+kiosk_systemd_autologin_path: "/etc/systemd/system/getty@tty1.service.d"
+kiosk_systemd_autologin_file: "{{ kiosk_systemd_autologin_path }}/autologin.conf"
 kiosk_x_autostart: yes
 kiosk_bashrc_file: "/home/{{ kiosk_user }}/.bashrc"
 kiosk_xinitrc_file: "/home/{{ kiosk_user }}/.xinitrc"
@@ -17,4 +18,3 @@ kiosk_window_manager_command: "matchbox-window-manager -use_titlebar no &"
 kiosk_remove_mouse: no
 kiosk_remove_mouse_command: "unclutter &"
 kiosk_browser_command: "exec midori -e Fullscreen -a {{ kiosk_url }}"
-

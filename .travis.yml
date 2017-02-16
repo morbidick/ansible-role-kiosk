@@ -16,19 +16,19 @@ install:
   - printf '[defaults]\nroles_path=../' >ansible.cfg
 
   # Create symlink for Ansible role discovery
-  - ln -s $(basename $(pwd)) ../yubi2factor
+  - ln -s $(basename $(pwd)) ../role_under_test
 
 
 script:
   # Basic role syntax check
-  - ansible-playbook -i tests/inventory tests/test.yml --syntax-check
+  - ansible-playbook -i "localhost," tests/test.yml --syntax-check
 
   # Run the role/playbook with ansible-playbook.
-  - ansible-playbook -i tests/inventory tests/test.yml -vvv --connection=local --become
+  - ansible-playbook -i "localhost," tests/test.yml --connection=local --become
 
   # Run the role/playbook again, checking to make sure it's idempotent.
   - >
-    ansible-playbook -i tests/inventory tests/test.yml -vvv --connection=local --become
+    ansible-playbook -i "localhost," tests/test.yml --connection=local --become
     | grep -q 'changed=0.*failed=0'
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
